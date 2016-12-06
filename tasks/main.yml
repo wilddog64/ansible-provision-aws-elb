@@ -1,0 +1,34 @@
+---
+# tasks file for ansible-provision-aws-elb
+- name: create {{ ec2_node_name }} elb
+  ec2_elb_lb:
+    name: "{{ elb_name }}"
+    state: present
+    connection_draining_timeout: "{{ elb_connection_draining_timeout }}"
+    region: "{{ aws_region }}"
+    subnets: "{{ elb_subnets }}"
+    security_group_names: "{{ elb_security_group_name }}"
+    cross_az_load_balancing: yes
+    idle_timeout: "{{ elb_idle_timeout | default(10) }}"
+    listeners:
+      - protocol: "{{ elb_protocol | default('https') }}"
+        load_balancer_port: "{{ elb_load_balancer_port }}"
+        instance_protocol: "{{ elb_instance_protocol }}"
+        instance_port: "{{ elb_instance_port }}"
+        ssl_certificate_id: "{{ elb_ssl_cert_arn }}"
+    health_check:
+      ping_protocol: "{{ elb_ping_protocol }}"
+      ping_port: "{{ elb_ping_port }}"
+      response_timeout: "{{ elb_response_timeout }}"
+      interval: "{{ elb_interval }}"
+      unhealthy_threshold: "{{ elb_unhealthy_threshold }}"
+      healthy_threshold: "{{ elb_healthy_threshold }}"
+    access_logs:
+      interval: "{{ elb_access_logs_interval }}"
+      s3_location: "{{ elb_access_logs_s3_location }}"
+      s3_prefix: "{{ elb_access_logs_s3_prefix }}"
+  register: ec2_elb
+  until: extract_elb.module_stderr is not defined
+  retries: 2
+  delay: 1
+

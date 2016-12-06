@@ -1,0 +1,22 @@
+---
+# defaults file for ansible-provision-aws-elb
+ec2_node_name: my-test
+elb_name: my-elb
+elb_connection_draining_timeout: 300
+region: us-west-2
+elb_subnets:
+elb_security_group_name:
+elb_idle_timeout: 10
+elb_protocol: https
+elb_load_balancer_port: 443
+elb_instance_protocol: http
+elb_instance_port: 80
+elb_ssl_cert_arn:
+elb_ping_protocol: tcp
+elb_ping_port: 80
+elb_response_timeout: 5
+elb_unhealthy_threshold: 2
+elb_healthy_threshold: 3
+elb_access_logs_interval: 5
+elb_access_logs_s3_location:
+elb_access_logs_s3_prefix:
